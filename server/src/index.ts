@@ -31,6 +31,7 @@ const fastify = Fastify({
 // Run the server!
 const start = async () => {
   try {
+    fastify.get('/health', async () => ({ ok: true }))
     createFolder(path.resolve(envConfig.UPLOAD_FOLDER))
     autoRemoveRefreshTokenJob()
     const whitelist = ['*']
@@ -52,7 +53,7 @@ const start = async () => {
     fastify.register(errorHandlerPlugin)
     fastify.register(fastifySocketIO, {
       cors: {
-        origin: envConfig.CLIENT_URL
+        origin: [envConfig.CLIENT_URL, envConfig.CLIENT_DOCKER_URL]
       }
     })
     fastify.register(socketPlugin)
@@ -88,9 +89,11 @@ const start = async () => {
     })
     await initOwnerAccount()
     await fastify.listen({
-      port: envConfig.PORT
+      port: envConfig.PORT,
+      host: envConfig.DOCKER_HOST
     })
     console.log(`Server đang chạy: ${API_URL}`)
+    console.log(`Docker Server đang chạy trên http://${envConfig.DOCKER_HOST}:${envConfig.PORT}`)
   } catch (err) {
     fastify.log.error(err)
     process.exit(1)
