@@ -110,7 +110,8 @@ const request = async <Response>(
   //_____________interceptor_______________//
   // nếu có lỗi trong quá trình request
   if (!res.ok) {
-    if (res.status === ENTITY_ERROR_STATUS) { //422
+    if (res.status === ENTITY_ERROR_STATUS) {
+      //422
       throw new EntityError(
         data as {
           status: 422
@@ -118,10 +119,13 @@ const request = async <Response>(
         },
       )
       //handle 401 token is expired
-    } else if (res.status === AUTHENTICATION_ERROR_STATUS) { //401
+    } else if (res.status === AUTHENTICATION_ERROR_STATUS) {
+      //401
       if (isClient) {
+        //lỗi 401 khi chạy ở client
         if (!clientLogoutRequest) {
           clientLogoutRequest = fetch('/api/auth/logout', {
+            //logout route handler
             method: 'POST',
             body: null, //Logout cho phep luon luon thanh cong
             headers: {
@@ -142,6 +146,7 @@ const request = async <Response>(
           }
         }
       } else {
+        //lỗi 401 khi chạy ở server
         const accessToken = (options?.headers as any)?.Authorization.split(' ')[1]
         redirect(`/logout?accessToken=${accessToken}`)
       }

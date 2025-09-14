@@ -20,7 +20,7 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/', request.url))
   }
 
-  // accessToken hết hạn
+  // accessToken hết hạn -> sau này phải chuyển thành refreshToken lại 
   if (!accessToken && refreshToken && privatePaths.some((path) => pathname.startsWith(path))) {
     const url = new URL('/logout', request.url)
     url.searchParams.set('refreshToken', refreshToken as string)
