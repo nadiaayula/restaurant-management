@@ -11,7 +11,7 @@ export function middleware(request: NextRequest) {
   const isAuth = Boolean(request.cookies.get('accessToken')?.value)
 
   if (!isAuth && privatePaths.some((path) => pathname.startsWith(path))) {
-    return NextResponse.redirect(new URL('/login', request.url))
+    return NextResponse.redirect(new URL('/logout', request.url))
   }
 
   if (isAuth && unAuthPaths.some((path) => pathname.startsWith(path))) {
