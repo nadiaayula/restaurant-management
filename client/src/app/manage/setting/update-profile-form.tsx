@@ -19,7 +19,7 @@ export default function UpdateProfileForm() {
   const [file, setFile] = useState<File | null>(null)
   const avatarInputRef = useRef<HTMLInputElement>(null)
 
-  // dữ liệu người dùng lấy từ API
+  // dữ liệu người dùng lấy từ API bằng useQuery
   const { data, refetch } = useAccountMeQuery()
   const updateMeMutation = useUpdateMeMutation()
   const uploadMediaMutation = useUploadMediaMutation()
@@ -30,8 +30,9 @@ export default function UpdateProfileForm() {
       avatar: undefined,
     },
   })
-  // đổ dữ liệu từ API vào form
+
   useEffect(() => {
+    // sử dụng useEffect để chạy ngay lần đầu khi data được fetch thành công (hoặc khi refetch)
     if (data) {
       const { name, avatar } = data.payload.data
       form.reset({
@@ -54,7 +55,7 @@ export default function UpdateProfileForm() {
     form.reset()
     setFile(null)
   }
-  
+
   const onSubmit = async (values: UpdateMeBodyType) => {
     if (updateMeMutation.isPending) return
     try {
