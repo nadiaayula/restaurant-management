@@ -13,7 +13,7 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  useReactTable
+  useReactTable,
 } from '@tanstack/react-table'
 import { formatDateTimeToLocaleString, simpleMatchText } from '@/lib/utils'
 import { Input } from '@/components/ui/input'
@@ -27,33 +27,33 @@ export const columns: ColumnDef<GuestItem>[] = [
     accessorKey: 'name',
     header: 'Tên',
     cell: ({ row }) => (
-      <div className='capitalize'>
+      <div className="capitalize">
         {row.getValue('name')} | (#{row.original.id})
       </div>
     ),
     filterFn: (row, columnId, filterValue: string) => {
       if (filterValue === undefined) return true
       return simpleMatchText(row.original.name + String(row.original.id), String(filterValue))
-    }
+    },
   },
   {
     accessorKey: 'tableNumber',
     header: 'Số bàn',
-    cell: ({ row }) => <div className='capitalize'>{row.getValue('tableNumber')}</div>,
+    cell: ({ row }) => <div className="capitalize">{row.getValue('tableNumber')}</div>,
     filterFn: (row, columnId, filterValue: string) => {
       if (filterValue === undefined) return true
       return simpleMatchText(String(row.original.tableNumber), String(filterValue))
-    }
+    },
   },
   {
     accessorKey: 'createdAt',
     header: () => <div>Tạo</div>,
     cell: ({ row }) => (
-      <div className='flex items-center space-x-4 text-sm'>
+      <div className="flex items-center space-x-4 text-sm">
         {formatDateTimeToLocaleString(row.getValue('createdAt'))}
       </div>
-    )
-  }
+    ),
+  },
 ]
 
 const PAGE_SIZE = 10
@@ -71,7 +71,7 @@ export default function GuestsDialog({ onChoose }: { onChoose: (guest: GuestItem
   const [rowSelection, setRowSelection] = useState({})
   const [pagination, setPagination] = useState({
     pageIndex: 0, // Gía trị mặc định ban đầu, không có ý nghĩa khi data được fetch bất đồng bộ
-    pageSize: PAGE_SIZE //default page size
+    pageSize: PAGE_SIZE, //default page size
   })
 
   const table = useReactTable({
@@ -92,14 +92,14 @@ export default function GuestsDialog({ onChoose }: { onChoose: (guest: GuestItem
       columnFilters,
       columnVisibility,
       rowSelection,
-      pagination
-    }
+      pagination,
+    },
   })
 
   useEffect(() => {
     table.setPagination({
       pageIndex: 0,
-      pageSize: PAGE_SIZE
+      pageSize: PAGE_SIZE,
     })
   }, [table])
 
@@ -116,53 +116,55 @@ export default function GuestsDialog({ onChoose }: { onChoose: (guest: GuestItem
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant='outline'>Chọn khách</Button>
+        <Button variant="outline">Chọn khách</Button>
       </DialogTrigger>
-      <DialogContent className='sm:max-w-[700px] max-h-full overflow-auto'>
+      <DialogContent className="sm:max-w-[700px] max-h-full overflow-auto">
         <DialogHeader>
           <DialogTitle>Chọn khách hàng</DialogTitle>
         </DialogHeader>
         <div>
-          <div className='w-full'>
-            <div className='flex flex-wrap gap-2'>
-              <div className='flex items-center'>
-                <span className='mr-2'>Từ</span>
+          <div className="w-full">
+            <div className="flex flex-wrap gap-2">
+              <div className="flex items-center">
+                <span className="mr-2">Từ</span>
                 <Input
-                  type='datetime-local'
-                  placeholder='Từ ngày'
-                  className='text-sm'
+                  type="datetime-local"
+                  placeholder="Từ ngày"
+                  className="text-sm"
                   value={format(fromDate, 'yyyy-MM-dd HH:mm').replace(' ', 'T')}
+                  suppressHydrationWarning
                   onChange={(event) => setFromDate(new Date(event.target.value))}
                 />
               </div>
-              <div className='flex items-center'>
-                <span className='mr-2'>Đến</span>
+              <div className="flex items-center">
+                <span className="mr-2">Đến</span>
                 <Input
-                  type='datetime-local'
-                  placeholder='Đến ngày'
+                  type="datetime-local"
+                  placeholder="Đến ngày"
                   value={format(toDate, 'yyyy-MM-dd HH:mm').replace(' ', 'T')}
+                  suppressHydrationWarning
                   onChange={(event) => setToDate(new Date(event.target.value))}
                 />
               </div>
-              <Button className='' variant={'outline'} onClick={resetDateFilter}>
+              <Button className="" variant={'outline'} onClick={resetDateFilter}>
                 Reset
               </Button>
             </div>
-            <div className='flex items-center py-4 gap-2'>
+            <div className="flex items-center py-4 gap-2">
               <Input
-                placeholder='Tên hoặc Id'
+                placeholder="Tên hoặc Id"
                 value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
                 onChange={(event) => table.getColumn('name')?.setFilterValue(event.target.value)}
-                className='w-[170px]'
+                className="w-[170px]"
               />
               <Input
-                placeholder='Số bàn'
+                placeholder="Số bàn"
                 value={(table.getColumn('tableNumber')?.getFilterValue() as string) ?? ''}
                 onChange={(event) => table.getColumn('tableNumber')?.setFilterValue(event.target.value)}
-                className='w-[80px]'
+                className="w-[80px]"
               />
             </div>
-            <div className='rounded-md border'>
+            <div className="rounded-md border">
               <Table>
                 <TableHeader>
                   {table.getHeaderGroups().map((headerGroup) => (
@@ -188,7 +190,7 @@ export default function GuestsDialog({ onChoose }: { onChoose: (guest: GuestItem
                         onClick={() => {
                           choose(row.original)
                         }}
-                        className='cursor-pointer'
+                        className="cursor-pointer"
                       >
                         {row.getVisibleCells().map((cell) => (
                           <TableCell key={cell.id}>
@@ -199,7 +201,7 @@ export default function GuestsDialog({ onChoose }: { onChoose: (guest: GuestItem
                     ))
                   ) : (
                     <TableRow>
-                      <TableCell colSpan={columns.length} className='h-24 text-center'>
+                      <TableCell colSpan={columns.length} className="h-24 text-center">
                         No results.
                       </TableCell>
                     </TableRow>
@@ -207,8 +209,8 @@ export default function GuestsDialog({ onChoose }: { onChoose: (guest: GuestItem
                 </TableBody>
               </Table>
             </div>
-            <div className='flex items-center justify-end space-x-2 py-4'>
-              <div className='text-xs text-muted-foreground py-4 flex-1 '>
+            <div className="flex items-center justify-end space-x-2 py-4">
+              <div className="text-xs text-muted-foreground py-4 flex-1 ">
                 Hiển thị <strong>{table.getPaginationRowModel().rows.length}</strong> trong{' '}
                 <strong>{data.length}</strong> kết quả
               </div>
@@ -216,7 +218,7 @@ export default function GuestsDialog({ onChoose }: { onChoose: (guest: GuestItem
                 <AutoPagination
                   page={table.getState().pagination.pageIndex + 1}
                   pageSize={table.getPageCount()}
-                  pathname='/manage/Guests'
+                  pathname="/manage/Guests"
                 />
               </div>
             </div>

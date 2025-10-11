@@ -1,10 +1,25 @@
 import http from '@/lib/http'
-import { GetOrdersResType, UpdateOrderBodyType, UpdateOrderResType } from '@/schemas/order.schema'
+import {
+  GetOrderDetailResType,
+  GetOrdersQueryParamsType,
+  GetOrdersResType,
+  UpdateOrderBodyType,
+  UpdateOrderResType,
+} from '@/schemas/order.schema'
+import querystring from 'query-string'
 
 const orderApi = {
-  getOrderList: () => http.get<GetOrdersResType>('/orders'),
+  getOrderList: (queryParams: GetOrdersQueryParamsType) =>
+    http.get<GetOrdersResType>(
+      `/orders?${querystring.stringify({
+        fromDate: queryParams.fromDate ? queryParams.fromDate.toISOString() : undefined,
+        toDate: queryParams.toDate ? queryParams.toDate.toISOString() : undefined,
+      })}`,
+    ),
 
   updateOrder: (orderId: number, body: UpdateOrderBodyType) => http.put<UpdateOrderResType>(`/orders/${orderId}`, body),
+
+  getOrderDetail: (orderId: number) => http.get<GetOrderDetailResType>(`/orders/${orderId}`),
 }
 
 export default orderApi
