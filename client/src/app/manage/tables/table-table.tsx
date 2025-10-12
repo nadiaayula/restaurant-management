@@ -275,7 +275,10 @@ export default function TableTable() {
             <AutoPagination
               page={table.getState().pagination.pageIndex + 1}
               pageSize={table.getPageCount()}
-              pathname="/manage/tables"
+              onClick={(pageNumber) => {
+                table.setPageIndex(pageNumber - 1)
+              }}
+              isLink={false}
             />
           </div>
         </div>

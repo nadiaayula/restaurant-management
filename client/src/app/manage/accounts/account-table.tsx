@@ -288,7 +288,10 @@ export default function AccountTable() {
             <AutoPagination
               page={table.getState().pagination.pageIndex + 1}
               pageSize={table.getPageCount()}
-              pathname="/manage/accounts"
+              onClick={(pageNumber) => {
+                table.setPageIndex(pageNumber - 1)
+              }}
+              isLink={false}
             />
           </div>
         </div>

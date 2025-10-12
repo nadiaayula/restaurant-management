@@ -179,7 +179,10 @@ export function TablesDialog({ onChoose }: { onChoose: (table: TableItem) => voi
                 <AutoPagination
                   page={table.getState().pagination.pageIndex + 1}
                   pageSize={table.getPageCount()}
-                  pathname="/manage/Tables"
+                  onClick={(pageNumber) => {
+                    table.setPageIndex(pageNumber - 1)
+                  }}
+                  isLink={false}
                 />
               </div>
             </div>
