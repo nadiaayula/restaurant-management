@@ -31,5 +31,5 @@ jobs:
      # 4. Build & Push Image untuk Frontend (Client) dengan menyuntikkan Secret URL Backend
       - name: Build and Push Client Image
         run: |
-          docker build --build-arg DOCKER_PUBLIC_API_ENDPOINT=${{ secrets.DOCKER_PUBLIC_API_ENDPOINT }} -t ${{ secrets.AZURE_REGISTRY_LOGIN_SERVER }}/restaurant-client:latest ./client
+          docker build --build-arg DOCKER_PUBLIC_API_ENDPOINT="${{ secrets.DOCKER_PUBLIC_API_ENDPOINT }}" -t ${{ secrets.AZURE_REGISTRY_LOGIN_SERVER }}/restaurant-client:latest ./client
           docker push ${{ secrets.AZURE_REGISTRY_LOGIN_SERVER }}/restaurant-client:latest
